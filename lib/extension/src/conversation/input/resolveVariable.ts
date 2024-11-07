@@ -6,6 +6,7 @@ import { Message } from "../Message";
 import { getSelectedLocationText } from "./getSelectedLocationText";
 import { getSelectedTextWithDiagnostics } from "./getSelectionWithDiagnostics";
 import { getOpenFiles } from "./getOpenFiles";
+import { getRootFolder } from "./getRootFolder";
 
 export async function resolveVariable(
   variable: Variable,
@@ -27,6 +28,8 @@ export async function resolveVariable(
       return getFilename();
     case "language":
       return getLanguage();
+    case "rootfolder":
+      return getRootFolder();
     case "selected-text-with-diagnostics":
       return getSelectedTextWithDiagnostics({
         diagnosticSeverities: variable.severities,

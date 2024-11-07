@@ -190,6 +190,7 @@ export class Conversation {
         maxTokens: prompt.maxTokens,
         stop: prompt.stop,
         temperature: prompt.temperature,
+        conversation: this,
       });
 
       let responseUntilNow = "";

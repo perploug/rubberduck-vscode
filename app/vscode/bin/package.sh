@@ -15,6 +15,7 @@ cp -r ../../template dist
 echo "Copying extension lib files..."
 mkdir -p dist/extension/dist
 cp dev/extension/dist/extension.js dist/extension/dist/extension.js
+cp dev/extension/dist/extension.js.map dist/extension/dist/extension.js.map
 
 echo "Copying webview lib files..."
 mkdir -p dist/webview/asset

@@ -7,10 +7,13 @@ import {
   openai,
   streamText,
 } from "modelfusion";
+
 import * as vscode from "vscode";
 import { z } from "zod";
 import { Logger } from "../logger";
 import { ApiKeyManager } from "./ApiKeyManager";
+import { DockerPrompt } from "./labs/DockerPrompt";
+import { Conversation } from "../conversation/Conversation";
 
 function getOpenAIBaseUrl(): string {
   return (
@@ -42,7 +45,7 @@ function getModel() {
 export class AIClient {
   private readonly apiKeyManager: ApiKeyManager;
   private readonly logger: Logger;
-
+  private readonly dockerPrompt: DockerPrompt;
   constructor({
     apiKeyManager,
     logger,
@@ -52,6 +55,15 @@ export class AIClient {
   }) {
     this.apiKeyManager = apiKeyManager;
     this.logger = logger;
+
+    this.dockerPrompt = new DockerPrompt({
+      apiKeyManager: this.apiKeyManager,
+      logger: this.logger,
+    });
+
+    // pull the standard prompt image
+    this.logger.log("pulling the prompt image");
+    this.dockerPrompt.pullPromptImage();
   }
 
   private async getOpenAIApiConfiguration() {
@@ -70,6 +82,12 @@ export class AIClient {
     });
   }
 
+  // these 3 are wired up the in the conversation class
+  // will hardcode in the labs AI client directly in conversation instead of
+  // reimplementing this Client class, event though that would be the right
+  // thing to do
+
+  // this one is essentially unneeded as we will override this whole thing
   async getTextStreamingModel({
     maxTokens,
     stop,
@@ -104,12 +122,15 @@ export class AIClient {
           .withInstructionPrompt();
   }
 
+  // this is the only thing we will basically need to reimplement
   async streamText({
+    conversation,
     prompt,
     maxTokens,
     stop,
     temperature = 0,
   }: {
+    conversation: Conversation;
     prompt: string;
     maxTokens: number;
     stop?: string[] | undefined;
@@ -117,10 +138,8 @@ export class AIClient {
   }) {
     this.logger.log(["--- Start prompt ---", prompt, "--- End prompt ---"]);
 
-    return streamText({
-      model: await this.getTextStreamingModel({ maxTokens, stop, temperature }),
-      prompt: { instruction: prompt },
-    });
+    // docker specific prompt engine
+    return this.dockerPrompt.streamText(prompt, conversation);
   }
 
   async generateEmbedding({ input }: { input: string }) {

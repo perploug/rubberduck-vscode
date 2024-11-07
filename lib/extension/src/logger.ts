@@ -77,9 +77,10 @@ export class LoggerUsingVSCodeOutput implements Logger {
     level: LogLevel;
   }): void {
     const { lines, prefix, level } = options;
-    if (!this.canLog(level)) return;
+    //    if (!this.canLog(level)) return;
 
     lines.forEach((line) => {
+      console.log(line);
       this.outputChannel.appendLine(`${prefix} ${line}`);
     });
   }

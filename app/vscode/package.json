@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {},
-  "devDependencies": {},
   "dependencies": {
     "@rubberduck/extension": "*",
-    "@rubberduck/webview": "*"
+    "@rubberduck/webview": "*",
+    "esbuild": "0.16.10"
   }
 }
