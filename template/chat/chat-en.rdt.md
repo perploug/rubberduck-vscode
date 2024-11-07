@@ -1,7 +1,5 @@
 # AI Chat in English
 
-This template lets you chat with Rubberduck in English.
-
 ## Template
 
 ### Configuration
@@ -36,20 +34,31 @@ This template lets you chat with Rubberduck in English.
   ],
   "response": {
     "maxTokens": 1024,
-    "stop": ["Bot:", "Developer:"]
+    "stop": ["Bot:", "Developer:", "{\"done\":\"stop\"}"]
   }
 }
 ```
 
-### Response Prompt
-
 ```template-response
-## Instructions
-Continue the conversation below.
-Pay special attention to the current developer request.
+---
+tools:
+  - name: docker
+    description: run any docker command with arguments
+    parameters:
+      type: object
+      properties:
+        args:
+          type: string
+          description: arguments to pass to the docker CLI
+    container:
+      image: docker:cli
+      command:
+        - "\{{args|safe}}"
+---
+# Prompt user
 
-## Current Request
-Developer: {{lastMessage}}
+{{lastMessage}}
+
 
 {{#if selectedText}}
 ## Selected Code
@@ -61,21 +70,10 @@ Developer: {{lastMessage}}
 ## Conversation
 {{#each messages}}
 {{#if (eq author "bot")}}
-Bot: {{content}}
+System: {{content}}
 {{else}}
-Developer: {{content}}
+User: {{content}}
 {{/if}}
 {{/each}}
 
-## Task
-Write a response that continues the conversation.
-Stay focused on current developer request.
-Consider the possibility that there might not be a solution.
-Ask for clarification if the message does not make sense or more input is needed.
-Use the style of a documentation article.
-Omit any links.
-Include code snippets (using Markdown) and examples where appropriate.
-
-## Response
-Bot:
 ```
