@@ -19,7 +19,7 @@ tools:
         command:
           type: string
           description: command to pass to the git CLI
-        arguents:
+        arguments:
           type: string
           description: arguments for the given git command
     container:
