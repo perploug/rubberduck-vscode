@@ -1,0 +1,43 @@
+tools:
+  - name: docker
+    description: run any docker command with arguments
+    parameters:
+      type: object
+      properties:
+        args:
+          type: string
+          description: arguments to pass to the docker CLI
+    container:
+      image: docker:cli
+      command:
+        - "{{args|safe}}"
+  - name: git
+    description: run any git command with arguments
+    parameters:
+      type: object
+      properties:
+        command:
+          type: string
+          description: command to pass to the git CLI
+        arguments:
+          type: string
+          description: arguments for the given git command
+    container:
+      image: alpine/git
+      command:
+        - "{{command|safe}}"
+        - "{{arguments|safe}}"
+  - name: write_files
+    description: write or save files in the project directory
+  - name: read_file
+    description: Runs cat on a file
+    parameters:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Path of the file to read
+    container:
+      image: vonwig/bash_alpine
+      command:
+        - "cat {{path|safe}}"
