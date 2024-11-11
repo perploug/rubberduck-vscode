@@ -211,18 +211,12 @@ export class DockerPrompt {
         if (context.inFunction) {
           context.inFunction = false;
           context.frl = 0;
-
           return respond("\n```\n\n");
         }
         break;
       case "start":
         const { level, role, content } = json.params;
-        const header = Array(level + 3)
-          .fill("#")
-          .join("");
-        return respond(
-          `${header} ROLE ${role}${content ? ` (${content})` : ""}\n\n`
-        );
+        return respond(`###### ${role}${content ? ` (${content})` : ""}\n\n`);
         break;
       case "functions-done":
         return respond(json.params.content + "\n\n");

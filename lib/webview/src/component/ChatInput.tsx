@@ -44,8 +44,6 @@ export const ChatInput: React.FC<{
       const message = event!.data;
 
       if (message.command === 'receiveFilePath') {
-        console.log(message.message)
-
         if(message.message){
           let currentVal = textarea.value;
           textarea.value = currentVal.substring(0, currentVal.length-1) + "./" + message.message;
@@ -70,7 +68,7 @@ export const ChatInput: React.FC<{
         ref={callbackRef}
         placeholder={placeholder}
         value={text}
-        rows={1}
+        rows={3}
         onInput={(event) => {
           if (!textareaWrapperRef.current) return;
 

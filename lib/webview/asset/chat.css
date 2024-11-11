@@ -215,6 +215,20 @@ body {
   padding-bottom: 5px;
 }
 
+.message :is( h1, h2, h3, h4, h5, h6 ){
+  font-size: medium;
+  font-weight: 500;
+  width: 100%
+} 
+
+.message h6 {
+  background-color: var(--vscode-sideBar-background);
+  color: var(--vscode-input-foreground);
+  padding: 5px;
+  font-size: small;
+  border-radius: 5px;
+}
+
 .message code {
   color: var(--vscode-editor-foreground);
   white-space: pre-wrap;
@@ -224,8 +238,8 @@ body {
 .message pre {
   border-radius: var(--rubberduck-container-padding);
   padding: var(--rubberduck-container-padding);
-  background-color: var(--vscode-editor-wordHighlightStrongBackground);
-
+  border: 1px solid var(--vscode-editor-foreground);
+  
   color: var(--vscode-editor-foreground);
   white-space: pre-wrap;
 }
