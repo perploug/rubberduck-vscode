@@ -45,6 +45,16 @@
   "contributes": {
     "commands": [
       {
+        "command": "rubberduck.unInstallTool",
+        "category": "Rubberduck",
+        "title": "Remove AI agent tools from workspace"
+      },
+      {
+        "command": "rubberduck.installTool",
+        "category": "Rubberduck",
+        "title": "Add AI agent tools to workspace"
+      },
+      {
         "command": "rubberduck.enterOpenAIApiKey",
         "category": "Rubberduck",
         "title": "Enter OpenAI API key"

@@ -8,6 +8,7 @@ import { ConversationTypesProvider } from "./conversation/ConversationTypesProvi
 import { DiffEditorManager } from "./diff/DiffEditorManager";
 import { indexRepository } from "./index/indexRepository";
 import { getVSCodeLogLevel, LoggerUsingVSCodeOutput } from "./logger";
+import { ToolsProvider } from "./tools/ToolsProvider";
 
 export const activate = async (context: vscode.ExtensionContext) => {
   const apiKeyManager = new ApiKeyManager({
@@ -42,6 +43,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
   });
 
   await conversationTypesProvider.loadConversationTypes();
+
+  const toolsProvider = new ToolsProvider();
 
   const ai = new AIClient({
     apiKeyManager,
@@ -105,6 +108,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     vscode.commands.registerCommand("rubberduck.editCode", () => {
       chatController.createConversation("edit-code");
     }),
+
     vscode.commands.registerCommand("rubberduck.startCustomChat", async () => {
       const items = conversationTypesProvider
         .getConversationTypes()
@@ -133,6 +137,59 @@ export const activate = async (context: vscode.ExtensionContext) => {
 
       await chatController.createConversation(result.id);
     }),
+
+    vscode.commands.registerCommand("rubberduck.installTool", async () => {
+      const remoteTools = await toolsProvider.getRemoteTools();
+      const items = remoteTools.map((tool) => ({
+        id: tool.name,
+        label: tool.name,
+        description: tool.description,
+        details: tool.container,
+        icon: vscode.ThemeIcon.File,
+      }));
+
+      const result = await vscode.window.showQuickPick(items, {
+        title: `Search Romote tools...`,
+        matchOnDescription: true,
+        matchOnDetail: true,
+
+        placeHolder: "Select remote tools...",
+      });
+
+      if (result == undefined) {
+        return; // user cancelled
+      }
+
+      const selected = remoteTools.find((tool) => tool.name === result.id);
+
+      if (selected) await toolsProvider.addWorkspaceTool(selected);
+    }),
+
+    vscode.commands.registerCommand("rubberduck.unInstallTool", async () => {
+      const tools = await toolsProvider.getToolsInWorkspace();
+      const items = tools.map((tool) => ({
+        id: tool.name,
+        label: tool.name,
+        description: tool.description,
+        details: tool.container,
+        icon: vscode.ThemeIcon.File,
+      }));
+
+      const result = await vscode.window.showQuickPick(items, {
+        title: `Search tools...`,
+        matchOnDescription: true,
+        matchOnDetail: true,
+
+        placeHolder: "search...",
+      });
+
+      if (result == undefined) {
+        return; // user cancelled
+      }
+
+      await toolsProvider.removeWorkspaceTool(result.id);
+    }),
+
     vscode.commands.registerCommand("rubberduck.touchBar.startChat", () => {
       chatController.createConversation("chat-en");
     }),

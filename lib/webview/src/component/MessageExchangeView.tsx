@@ -19,14 +19,21 @@ export function MessageExchangeView({
 
   return (
     <div className="message-exchange">
-      {content.messages.map((message, i) => (
-        <div className={`message ${message.author}`} key={i}>
-          {message.author === "user" && message.content}
-          {message.author === "bot" && (
-            <ReactMarkdown>{message.content}</ReactMarkdown>
-          )}
+      <div className={`messages`}>  
+        <div>
+        {content.messages.map((message, i) => (
+          <div className={`message ${message.author}`} key={i}>
+            {message.author === "user" && message.content}
+            {message.author === "bot" && (
+              <ReactMarkdown>{message.content}</ReactMarkdown>
+            )}
+          </div>
+        ))}
         </div>
-      ))}
+      </div>
+
+      <div className={`messages-footer`}>
+          
       {(() => {
         const type = content.state.type;
         switch (type) {
@@ -53,7 +60,7 @@ export function MessageExchangeView({
                   content.state.responsePlaceholder ??
                   content.messages.length > 0
                     ? "Reply…"
-                    : "Ask…"
+                    : "Ask me…"
                 }
                 text={inputText}
                 onChange={setInputText}
@@ -69,6 +76,7 @@ export function MessageExchangeView({
           }
         }
       })()}
+      </div>
 
       {content.error && (
         <ErrorMessage

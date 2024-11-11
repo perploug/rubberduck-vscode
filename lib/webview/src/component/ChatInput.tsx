@@ -1,4 +1,7 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { sendMessage, SendMessage } from "../vscode/SendMessage";
+import { OutgoingMessage } from "http";
+
 
 export const ChatInput: React.FC<{
   placeholder?: string;
@@ -15,6 +18,14 @@ export const ChatInput: React.FC<{
   onSubmit,
   shouldCreateNewLineOnEnter,
 }) => {
+
+  let bound = false;
+  if(!bound){
+    bound = true;
+    
+  }
+
+
   // callback to automatically focus the input box
   const callbackRef = useCallback((inputElement: HTMLTextAreaElement) => {
     if (inputElement) {
@@ -26,6 +37,31 @@ export const ChatInput: React.FC<{
   }, []);
 
   const textareaWrapperRef = useRef<HTMLDivElement>(null);
+  
+  
+  function getUrl(textarea : HTMLTextAreaElement){
+    const handler = function(event : any){
+      const message = event!.data;
+
+      if (message.command === 'receiveFilePath') {
+        console.log(message.message)
+
+        if(message.message){
+          let currentVal = textarea.value;
+          textarea.value = currentVal.substring(0, currentVal.length-1) + "./" + message.message;
+          textarea.focus();
+        }
+
+        //textareaWrapperRef.current?.innerText = message.message;
+        window.removeEventListener("message", handler);
+      }
+    }  
+
+    sendMessage({type: "insertFilePath"});
+    window.addEventListener('message', handler);
+  }
+
+
 
   return (
     <div className="chat-input" ref={textareaWrapperRef}>
@@ -44,7 +80,14 @@ export const ChatInput: React.FC<{
           onChange?.(event.currentTarget.value);
         }}
         // capture onKeyDown to prevent the user from adding enter to the input
-        onKeyDown={(event) => {
+        onKeyDown={(event) => {          
+          
+          if (event.key === "@"){
+            ///@ts-ignore
+            getUrl(event.target); 
+            return;
+          }
+
           if (
             !(event.target instanceof HTMLTextAreaElement) ||
             event.shiftKey ||

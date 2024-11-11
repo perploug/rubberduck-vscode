@@ -87,7 +87,11 @@ const variableSchema = zod.discriminatedUnion("type", [
     time: zod.enum(["conversation-start"]),
   }),
   variableBaseSchema.extend({
-    type: zod.literal("rootfolder"),
+    type: zod.literal("root-folder"),
+    time: zod.enum(["conversation-start"]),
+  }),
+  variableBaseSchema.extend({
+    type: zod.literal("tools"),
     time: zod.enum(["conversation-start"]),
   }),
   variableBaseSchema.extend({

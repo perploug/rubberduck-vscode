@@ -21,7 +21,7 @@ export class ChatPanel implements vscode.WebviewViewProvider {
 
   private readonly extensionUri: vscode.Uri;
 
-  private webviewPanel: WebviewContainer | undefined;
+  public webviewPanel: WebviewContainer | undefined;
   private apiKeyManager: ApiKeyManager;
 
   private state: webviewApi.PanelState;
@@ -98,6 +98,13 @@ export class ChatPanel implements vscode.WebviewViewProvider {
 
     // not using await here, to avoid having an infinite load-in-progress indicator
     this.renderPanel();
+  }
+
+  postMessage(command: string, message: any) {
+    this.webviewPanel?.webview.postMessage({
+      command: command,
+      message: message,
+    });
   }
 
   async update(model: ChatModel) {

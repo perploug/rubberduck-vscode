@@ -38,6 +38,9 @@ body {
 }
 
 .conversation {
+  display: flex; /* displays flex-items (children) inline */
+  flex-direction: column; /* stacks them vertically */
+  height: 100%;
   cursor: default;
 }
 
@@ -47,6 +50,30 @@ body {
 
 .conversation > .message-exchange {
   min-height: 25px;
+  flex: 1; /* takes the remaining height of the "container" div */
+  overflow: auto; /* to scroll just the "main" div */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 100%
+}
+
+.conversation .messages {
+  flex: 1;
+  overflow-y: auto;
+  display:flex; 
+  align-items: flex-end;
+  flex-direction: column-reverse;
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.conversation .messages div.message:first-child{
+  margin-top: auto;
+}
+
+.conversation .messages-footer {
+  width: 100%
 }
 
 .conversation > .instruction-refinement {

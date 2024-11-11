@@ -63,6 +63,7 @@ export class DockerPrompt {
     const promptFilePath = path.join(os.tmpdir(), uniqueID + ".md");
     fs.writeFileSync(promptFilePath, prompt, "utf-8");
     this.logger.log(promptFilePath);
+    this.logger.log([prompt]);
 
     // get docker credentials
     const credentails = await getDockerCredentials();
@@ -93,7 +94,7 @@ export class DockerPrompt {
     uniqueID: string,
     preprocess: (
       json: any,
-      context: { inFunction: boolean; response: string },
+      context: { inFunction: boolean; frl: number; response: string },
       cancel: () => void
     ) => any
     //token: CancellationToken
@@ -139,7 +140,11 @@ export class DockerPrompt {
     connection.listen();
 
     // holding a context to help with understanding the entire output
-    const responseContext = { inFunction: false, response: "" };
+    const responseContext = {
+      inFunction: false,
+      frl: 0,
+      response: "",
+    };
 
     return createEventIterator<{ type: string; params: any }>(
       ({ emit, cancel }) => {
@@ -177,7 +182,7 @@ export class DockerPrompt {
       type: string;
       params: any;
     },
-    context: { inFunction: boolean; response: string },
+    context: { inFunction: boolean; frl: number; response: string },
     cancel: () => void
   ): string | undefined {
     function respond(response: string) {
@@ -191,16 +196,22 @@ export class DockerPrompt {
           id,
           function: { arguments: args },
         } = json.params;
-        const params_str = args;
+        const params_str = args as string;
         if (!context.inFunction) {
           context.inFunction = true;
+          context.frl = params_str.length;
           return `\`\`\`json\n${params_str}`;
         } else {
-          return respond(params_str);
+          const pResonse = params_str.substring(context.frl);
+          context.frl = params_str.length;
+
+          return respond(pResonse);
         }
       case "functions-done":
         if (context.inFunction) {
           context.inFunction = false;
+          context.frl = 0;
+
           return respond("\n```\n\n");
         }
         break;

@@ -7,6 +7,7 @@ import { resolveVariables } from "../conversation/input/resolveVariables";
 import { DiffEditorManager } from "../diff/DiffEditorManager";
 import { ChatModel } from "./ChatModel";
 import { ChatPanel } from "./ChatPanel";
+import { quickFileOpen } from "./quickFilePick";
 
 export class ChatController {
   private readonly chatPanel: ChatPanel;
@@ -98,6 +99,15 @@ export class ChatController {
         await this.chatModel
           .getConversationById(message.data.id)
           ?.exportMarkdown();
+        break;
+      }
+      ///@ts-ignore
+      case "insertFilePath": {
+        const file = await quickFileOpen();
+        if (file) {
+          this.chatPanel.postMessage("receiveFilePath", file.relativePath);
+        }
+
         break;
       }
       case "retry": {

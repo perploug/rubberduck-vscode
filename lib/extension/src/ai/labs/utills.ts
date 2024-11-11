@@ -42,7 +42,7 @@ export const getWorkspaceFolder = async () => {
 
   // TODO: fix stupid hack
   if (!workspaceFolders) {
-    return "/Users/per/Documents/github/rubberduck-vscode";
+    return "/Users/per/Documents/github/todo-app/";
   }
 
   let workspaceFolder = workspaceFolders[0];

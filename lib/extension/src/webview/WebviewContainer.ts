@@ -3,13 +3,14 @@ import * as vscode from "vscode";
 import { generateNonce } from "./generateNonce";
 
 export class WebviewContainer {
-  private readonly webview: vscode.Webview;
+  public readonly webview: vscode.Webview;
   private readonly panelId: string;
   private readonly panelCssId: string;
   private readonly extensionUri: vscode.Uri;
   private readonly isStateReloadingEnabled: boolean;
 
   readonly onDidReceiveMessage;
+  readonly postMessage;
 
   constructor({
     panelId,
@@ -37,6 +38,7 @@ export class WebviewContainer {
     this.webview.html = this.createHtml();
 
     this.onDidReceiveMessage = this.webview.onDidReceiveMessage;
+    this.postMessage = this.webview.postMessage;
   }
 
   async updateState(state: webviewApi.PanelState) {

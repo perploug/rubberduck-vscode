@@ -30,7 +30,8 @@ export const ExpandedConversationView: React.FC<{
             (<ConversationHeader conversation={conversation} onIconClick={onClickInsertPrompt} />)
             : (<ConversationHeader conversation={conversation} />)
         }
-
+        
+        
         {(() => {
           const type = content.type;
           switch (type) {

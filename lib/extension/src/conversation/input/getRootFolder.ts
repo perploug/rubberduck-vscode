@@ -1,4 +1,3 @@
-import { getActiveEditor } from "../../vscode/getActiveEditor";
-
+// TODO fix this static folder reference
 export const getRootFolder = async () =>
-  "/Users/per/Documents/github/rubberduck-vscode";
+  "/Users/per/Documents/github/todo-app/";

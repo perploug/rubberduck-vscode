@@ -95,6 +95,9 @@ importers:
       vscode-languageclient:
         specifier: ^8.1.0
         version: 8.1.0
+      yaml:
+        specifier: ^2.6.0
+        version: 2.6.0
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -2643,6 +2646,11 @@ packages:
   yaml@2.2.1:
     resolution: {integrity: sha512-e0WHiYql7+9wr4cWMx3TVQrNwejKaEe7/rHNmQmqRjazfOP5W8PB6Jpebb5o6fIapbz9o9+2ipcaTM2ZwDI6lw==}
     engines: {node: '>= 14'}
+
+  yaml@2.6.0:
+    resolution: {integrity: sha512-a6ae//JvKDEra2kdi1qzCyrJW/WZCgFi8ydDV+eXExl95t+5R+ijnqHJbz9tmMh8FUjx3iv2fCQ4dclAQlO2UQ==}
+    engines: {node: '>= 14'}
+    hasBin: true
 
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
@@ -5447,6 +5455,8 @@ snapshots:
   yaml@1.10.2: {}
 
   yaml@2.2.1: {}
+
+  yaml@2.6.0: {}
 
   yargs-parser@21.1.1: {}
 

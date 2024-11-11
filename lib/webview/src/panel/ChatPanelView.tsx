@@ -8,7 +8,7 @@ const StartChatButton: React.FC<{
   onClick: () => void;
 }> = ({ onClick }) => (
   <div className="start-chat">
-    <button onClick={onClick}>Start new chat</button>
+    <button onClick={onClick}>Start chat</button>
   </div>
 );
 

@@ -25,6 +25,16 @@
       "type": "selected-text"
     },
     {
+      "name": "rootFolder",
+      "time": "conversation-start",
+      "type": "root-folder"
+    },
+    {
+      "name": "tools",
+      "time": "conversation-start",
+      "type": "tools"
+    },
+    {
       "name": "lastMessage",
       "time": "message",
       "type": "message",
@@ -40,22 +50,12 @@
 ```
 
 ```template-response
----
-tools:
-  - name: docker
-    description: run any docker command with arguments
-    parameters:
-      type: object
-      properties:
-        args:
-          type: string
-          description: arguments to pass to the docker CLI
-    container:
-      image: docker:cli
-      command:
-        - "\{{args|safe}}"
----
+{{tools}}
+
 # Prompt user
+
+You are an AI assisstant who through custom functions have access to the project directory
+and can perform helpful tasks in this folder using the functions.
 
 {{lastMessage}}
 
@@ -66,6 +66,7 @@ tools:
 {{selectedText}}
 \`\`\`
 {{/if}}
+
 
 ## Conversation
 {{#each messages}}
